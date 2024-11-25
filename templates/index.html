@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Energy Prisma</title>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <style>
+
+        /* Tema Claro - Padrão */
+
+        body {
+
+            font-family: 'Arial', sans-serif;
+
+            margin: 0;
+
+            padding: 0;
+
+            background-color: #f7f7f7;
+
+            color: #333;
+
+            transition: background-color 0.3s, color 0.3s;
+
+        }
+
+
+
+
+        header {
+
+            background-color: #4CAF50;
+
+            color: white;
+
+            padding: 20px 0;
+
+            text-align: center;
+
+            font-size: 1.5rem;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+        }
+
+
+
+
+        .container {
+
+            padding: 30px;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            background-color: #fff;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            border-radius: 8px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 30px;
+
+        }
+
+
+
+
+        /* Tema Escuro */
+
+        body.dark-mode {
+
+            background-color: #121212;
+
+            color: #f1f1f1;
+
+        }
+
+
+
+
+        header.dark-mode {
+
+            background-color: #1a1a1a;
+
+            color: #f1f1f1;
+
+        }
+
+
+
+
+        .container.dark-mode {
+
+            background-color: #333;
+
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+
+        }
+
+
+
+
+        /* Dashboards (Gráficos) */
+
+        .chart-container {
+
+            position: relative;
+
+            margin-bottom: 40px;
+
+            width: 48%; /* Ajuste para gráficos lado a lado */
+
+            max-width: 500px;
+
+            margin-left: auto;
+
+            margin-right: auto;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            border-radius: 8px;
+
+            background-color: #fff;
+
+        }
+
+
+
+
+        .chart-container canvas {
+
+            width: 100%;
+
+            height: auto;
+
+            border-radius: 8px;
+
+        }
+
+
+
+
+        /* Grid para Dashboards Lado a Lado */
+
+        .container {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: space-between;
+
+        }
+
+
+
+
+        .chart-container {
+
+            margin-bottom: 20px;
+
+            width: 48%; /* Coloca os gráficos lado a lado */
+
+        }
+
+
+
+
+        /* Tabela */
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 20px;
+
+        }
+
+
+
+
+        th, td {
+
+            padding: 15px;
+
+            border: 1px solid #ddd;
+
+            text-align: center;
+
+            font-size: 1rem;
+
+            color: #333;
+
+        }
+
+
+
+
+        th {
+
+            background-color: #4CAF50;
+
+            color: white;
+
+            font-weight: bold;
+
+        }
+
+
+
+
+        tbody tr:nth-child(even) {
+
+            background-color: #f2f2f2;
+
+        }
+
+
+
+
+        tbody tr:hover {
+
+            background-color: #e1f5e1;
+
+        }
+
+
+
+
+        /* Formulário */
+
+        .form-container {
+
+            margin: 40px auto;
+
+            padding: 30px;
+
+            background-color: #fff;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            max-width: 500px;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+
+
+
+        .form-container h2 {
+
+            font-size: 1.6rem;
+
+            font-weight: bold;
+
+            color: #333;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+        }
+
+
+
+
+        .form-container label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 1rem;
+
+            color: #555;
+
+        }
+
+
+
+
+        .form-container input, .form-container button {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 5px;
+
+            font-size: 1rem;
+
+            color: #333;
+
+        }
+
+
+
+
+        button {
+
+            background-color: #4CAF50;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: background-color 0.3s;
+
+        }
+
+
+
+
+        button:hover {
+
+            background-color: #45a049;
+
+        }
+
+
+
+
+        button.dark-mode {
+
+            background-color: #333;
+
+            color: #fff;
+
+        }
+
+
+
+
+        button.dark-mode:hover {
+
+            background-color: #555;
+
+        }
+
+
+
+
+        /* Previsão e mensagens */
+
+        .previsao {
+
+            margin-top: 40px;
+
+            text-align: center;
+
+            font-size: 1.3rem;
+
+            color: #333;
+
+            font-weight: bold;
+
+        }
+
+
+
+
+        #formMessage {
+
+            text-align: center;
+
+            font-size: 1rem;
+
+            margin-top: 20px;
+
+        }
+
+
+
+
+        #formMessage.green {
+
+            color: #4CAF50;
+
+        }
+
+
+
+
+        #formMessage.red {
+
+            color: #f44336;
+
+        }
+
+
+
+
+        /* Responsividade */
+
+        @media (max-width: 768px) {
+
+            .container {
+
+                padding: 15px;
+
+            }
+
+
+
+
+            .form-container {
+
+                padding: 20px;
+
+                max-width: 90%;
+
+            }
+
+
+
+
+            .chart-container {
+
+                margin-bottom: 30px;
+
+                width: 100%;
+
+            }
+
+
+
+
+            th, td {
+
+                font-size: 0.9rem;
+
+            }
+
+
+
+
+            .previsao {
+
+                font-size: 1.1rem;
+
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+   <!-- Cabeçalho -->
+   <header>
+       <h1>Energy Prisma</h1>
+       <a href="/logout" style="float: right; margin-right: 20px; color: white; text-decoration: none;">Logout</a>
+   </header>
+   
+   <div class="container">
+       <!-- Verificação de dados -->
+       {% if dados.labels %}
+       <!-- Gráficos -->
+       <div class="chart-container">
+           <p>
+               <strong>Gráfico de Potência (W):</strong> Este gráfico apresenta a potência elétrica consumida (em watts) ao longo do tempo. 
+               Ele permite visualizar os picos de consumo, ajudando a identificar os momentos de maior uso de energia. 
+               Com essas informações, você pode planejar a utilização de aparelhos para horários de menor demanda, economizando energia.
+           </p>
+           <canvas id="graficoPotencia"></canvas>
+       </div>
+       <div class="chart-container">
+           <p>
+               <strong>Gráfico de Custo Total (R$):</strong> Este gráfico mostra o custo acumulado de energia elétrica em reais ao longo do tempo. 
+               Ele auxilia no monitoramento dos gastos e na identificação de tendências de consumo que podem ser ajustadas para reduzir os custos mensais.
+           </p>
+           <canvas id="graficoCusto"></canvas>
+       </div>
+       <!-- Gráfico de Consumo Total por Dia -->
+       <div class="chart-container">
+            <p>
+                <strong>Gráfico de Consumo Total por Dia (kWh):</strong> Este gráfico exibe o consumo diário de energia elétrica em quilowatt-hora. 
+                Ele ajuda a entender como a energia é utilizada em cada dia, identificando possíveis padrões ou dias de maior consumo para otimizar o uso.
+            </p>
+            <canvas id="graficoConsumoDiario"></canvas>
+        </div>
+        <!-- Gráfico de Custo Total por Dia -->
+        <div class="chart-container">
+            <p>
+                <strong>Gráfico de Custo Total por Dia (R$):</strong> Este gráfico apresenta o custo diário da energia elétrica consumida. 
+                Ele é útil para identificar os dias da semana que possuem maior impacto financeiro, permitindo ajustar os hábitos para uma economia significativa.
+            </p>
+            <canvas id="graficoCustoDiario"></canvas>
+        </div>
+
+        <!-- Gráfico de Corrente Média -->
+        <div class="chart-container">
+            <p>
+                <strong>Gráfico de Corrente Média (A):</strong> Este gráfico mostra a corrente elétrica média (em ampères) utilizada ao longo do tempo. 
+                A corrente média é uma métrica importante para avaliar o consumo geral dos equipamentos e para identificar potenciais problemas, como sobrecarga ou equipamentos ineficientes.
+            </p>
+            <canvas id="graficoCorrenteMedia"></canvas>
+        </div>
+       <!-- Previsão -->
+       <div class="previsao">
+           <strong>Previsão de custo total para o mês:</strong>
+           <span id="previsao">{{ previsao }}</span>
+       </div>
+       <!-- Insights -->
+       <div class="insights-container">
+           <h2>Insights sobre o Consumo de Energia</h2>
+           <table>
+               <thead>
+                   <tr>
+                       <th>Data</th>
+                       <th>Consumo Total (kWh)</th>
+                       <th>Custo Total (R$)</th>
+                       <th>Corrente Média (A)</th>
+                       <th>Potência Média (W)</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   {% for insight in insights %}
+                   <tr>
+                       <td>{{ insight.data }}</td>
+                       <td>{{ insight.consumo_total }}</td>
+                       <td>{{ insight.custo_total }}</td>
+                       <td>{{ insight.corrente_media }}</td>
+                       <td>{{ insight.potencia_media }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+       </div>
+       {% else %}
+       <p>Nenhum dado disponível. Faça login para acessar informações.</p>
+       {% endif %}
+   </div>
+   <script>
+
+        // Dados recebidos do servidor para gráficos (substitua pelo formato enviado via backend)
+
+        const dados = {{ dados|tojson }};
+
+        const previsao = "{{ previsao }}";
+
+        const insights = {{ insights|tojson }};
+
+        const grafico_diario = {{ grafico_diario|tojson }};
+
+
+
+
+        // Atualizar a previsão no HTML
+
+        document.getElementById('previsao').textContent = previsao;
+
+
+
+
+        // Gráfico de Potência
+
+        const ctxPotencia = document.getElementById('graficoPotencia').getContext('2d');
+
+        new Chart(ctxPotencia, {
+
+            type: 'line',
+
+            data: {
+
+                labels: dados.labels,
+
+                datasets: [{
+
+                    label: 'Potência (W)',
+
+                    data: dados.potencia,
+
+                    borderColor: 'rgba(75, 192, 192, 1)',
+
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+
+                    borderWidth: 2,
+
+                    fill: true,
+
+                    tension: 0.4
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: true,
+
+                        position: 'top'
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+
+        // Gráfico de Custo Total por Hora
+
+        const ctxCusto = document.getElementById('graficoCusto').getContext('2d');
+
+        new Chart(ctxCusto, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: dados.labels,
+
+                datasets: [{
+
+                    label: 'Custo Total (R$)',
+
+                    data: dados.custo_total,
+
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+
+                    borderColor: 'rgba(255, 99, 132, 1)',
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: true,
+
+                        position: 'top'
+
+                    },
+
+                    tooltip: {
+
+                        callbacks: {
+
+                            label: (tooltipItem) => {
+
+                                return `R$ ${tooltipItem.raw.toFixed(2)}`;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+
+        // Gráfico de Consumo Total por Dia
+
+        const ctxConsumoDiario = document.getElementById('graficoConsumoDiario').getContext('2d');
+
+        new Chart(ctxConsumoDiario, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: grafico_diario.map(item => item.data),
+
+                datasets: [{
+
+                    label: 'Consumo Total (kWh)',
+
+                    data: grafico_diario.map(item => item.consumo_total),
+
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+
+                    borderColor: 'rgba(54, 162, 235, 1)',
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: true,
+
+                        position: 'top'
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+
+        // Gráfico de Custo Total por Dia
+
+        const ctxCustoDiario = document.getElementById('graficoCustoDiario').getContext('2d');
+
+        new Chart(ctxCustoDiario, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: grafico_diario.map(item => item.data),
+
+                datasets: [{
+
+                    label: 'Custo Total (R$)',
+
+                    data: grafico_diario.map(item => item.custo_total),
+
+                    backgroundColor: 'rgba(255, 159, 64, 0.5)',
+
+                    borderColor: 'rgba(255, 159, 64, 1)',
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: true,
+
+                        position: 'top'
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+
+        // Gráfico de Corrente Média por Hora
+
+        const ctxCorrenteMedia = document.getElementById('graficoCorrenteMedia').getContext('2d');
+
+        new Chart(ctxCorrenteMedia, {
+
+            type: 'line',
+
+            data: {
+
+                labels: grafico_diario.map(item => item.data),
+
+                datasets: [{
+
+                    label: 'Corrente Média (A)',
+
+                    data: grafico_diario.map(item => item.corrente_media),
+
+                    borderColor: 'rgba(153, 102, 255, 1)',
+
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+
+                    borderWidth: 2,
+
+                    fill: true,
+
+                    tension: 0.4
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: true,
+
+                        position: 'top'
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+
+        // Preencher a tabela de insights com os dados
+
+        const tabela = document.getElementById('corpoTabelaInsights');
+
+        insights.forEach(item => {
+
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+
+                <td>${item.data}</td>
+
+                <td>${item.consumo_total.toFixed(2)}</td>
+
+                <td>${item.custo_total.toFixed(2)}</td>
+
+                <td>${item.corrente_media.toFixed(2)}</td>
+
+                <td>${item.potencia_media.toFixed(2)}</td>
+
+            `;
+
+            tabela.appendChild(tr);
+
+        });
+
+
+
+
+        // Cadastro de Eletrodoméstico
+
+        const form = document.getElementById('formEletrodomestico');
+
+        form.addEventListener('submit', async (event) => {
+
+            event.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+
+            const tomada = document.getElementById('tomada').value;
+
+
+
+
+            try {
+
+                const response = await fetch('/cadastrar-eletrodomestico', {
+
+                    method: 'POST',
+
+                    headers: { 'Content-Type': 'application/json' },
+
+                    body: JSON.stringify({ nome, tomada })
+
+                });
+
+                const result = await response.json();
+
+                const messageBox = document.getElementById('formMessage');
+
+                if (response.ok) {
+
+                    messageBox.textContent = result.message;
+
+                    messageBox.style.color = 'green';
+
+                    form.reset();
+
+                } else {
+
+                    messageBox.textContent = result.error;
+
+                    messageBox.style.color = 'red';
+
+                }
+
+            } catch (error) {
+
+                document.getElementById('formMessage').textContent = "Erro ao cadastrar.";
+
+            }
+
+        });
+
+
+
+
+        // Função para alternar entre os temas
+
+        function toggleTheme() {
+
+            // Alternar a classe "dark-mode" no body e outros elementos
+
+            document.body.classList.toggle('dark-mode');
+
+            document.querySelector('header').classList.toggle('dark-mode');
+
+            document.querySelector('.form-container').classList.toggle('dark-mode');
+
+            document.querySelectorAll('.chart-container').forEach(container => container.classList.toggle('dark-mode'));
+
+            document.querySelector('button').classList.toggle('dark-mode');
+
+        }
+
+
+
+
+        // Adicionar o botão de alternância de tema
+
+        const themeToggleButton = document.createElement('button');
+
+        themeToggleButton.textContent = 'Alternar Tema';
+
+        themeToggleButton.style.position = 'fixed';
+
+        themeToggleButton.style.top = '20px';
+
+        themeToggleButton.style.right = '20px';
+
+        themeToggleButton.style.padding = '10px 20px';
+
+        themeToggleButton.style.backgroundColor = '#4CAF50';
+
+        themeToggleButton.style.color = 'white';
+
+        themeToggleButton.style.border = 'none';
+
+        themeToggleButton.style.borderRadius = '5px';
+
+        themeToggleButton.style.cursor = 'pointer';
+
+        themeToggleButton.style.zIndex = '1000';
+
+        themeToggleButton.addEventListener('click', toggleTheme);
+
+
+
+
+        // Adicionar o botão à página
+
+        document.body.appendChild(themeToggleButton);
+
+    </script>
+</body>
+</html>
+ 

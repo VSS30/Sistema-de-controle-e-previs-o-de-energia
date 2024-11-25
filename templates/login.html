@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Prisma - Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+        }
+        .cadastro-link {
+            margin-top: 15px;
+            display: block;
+            color: #4CAF50;
+            text-decoration: none;
+
+        }
+        .login-container {
+            text-align: center;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+        .login-container h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .login-container h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .login-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+        .marketing-message {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .highlight {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Energy Prisma</h1>
+        <h3>O futuro do monitoramento de energia está aqui.</h3>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Usuário" required>
+            <input type="password" name="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <div class="marketing-message">
+            Transforme o modo como você gerencia sua energia. <br>
+            Com o <span class="highlight">Energy Prisma</span>, você monitora seu consumo em tempo real, identifica picos de gasto e recebe insights preditivos para economizar mais!
+        </div>
+        <a class="cadastro-link" href="/cadastro">Ainda não tem uma conta? Cadastre-se aqui.</a>
+    </div>
+</body>
+</html>
